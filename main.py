@@ -4,16 +4,21 @@ import pywhatkit
 import datetime
 import wikipedia
 import pyjokes
+
 listener = sr.Recognizer()
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[17].id)
+run_time = True
+
 
 def talck(text):
     engine.say(text)
     engine.runAndWait()
 
+
 talck("Hello, I am Elodie. How I can help you?")
+
 
 def get_command():
     try:
@@ -41,12 +46,12 @@ def execute_command():
         pywhatkit.playonyt(song)
     elif 'time' in order:
         time = datetime.datetime.now().strftime('%I:%M %p')
-        print("The time now is ====> "+ time)
+        print("The time now is ====> " + time)
         talck("Based on my watch right now is:" + time)
     elif 'tell me' in order:
         person = order.replace('tell me', '')
-        personResult = wikipedia.summary(person,1)
-        print("Here the person Result ===> "+ personResult)
+        personResult = wikipedia.summary(person, 1)
+        print("Here the person Result ===> " + personResult)
         talck(personResult)
     elif 'do you love me' in order:
         talck("Sorry I do not")
@@ -54,8 +59,14 @@ def execute_command():
         talck("No I am in a relationship with the wifi")
     elif 'joke' in order:
         talck(pyjokes.get_joke())
-    else:
-        talck("Sorry I do not understand you, Could you say it again ?" )
+    elif 'stop' in order:
+        global run_time
+        run_time = False
+        talck('Okay I got it')
 
-while True:
-     execute_command()
+    else:
+        talck("Sorry I do not understand you, Could you say it again ?")
+
+
+while run_time:
+    execute_command()
